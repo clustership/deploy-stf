@@ -1,0 +1,39 @@
+---
+# tasks file for ocp4-stf-config
+- block:
+  - name: Apply k8s resources to deploy STF operators
+    k8s:
+      kubeconfig: "{{ kubeconfig }}"
+      validate_certs: "{{ k8s_validate_certs }}"
+      state: present
+      definition: "{{ lookup('template', role_path + '/templates/' + item) }}"
+    with_items:
+    - namespace.yaml.j2
+    - operatorgroup.yaml.j2
+    - catalogsource.yaml.j2
+    - catalogsource-stf.yaml.j2
+
+  - name: Check catalogsource availability
+    command: "oc get -n openshift-marketplace catalogsource redhat-operators-stf"
+    register: command_result
+    until: "'redhat-operators-stf' in command_result.stdout"
+    retries: 6
+    delay: 20
+    tags: check_catalogsource_configured
+
+  - name: Check packagemanifests smart-gateway-operator  availability
+    command: "oc get packagemanifests smart-gateway-operator"
+    register: command_result
+    until: "'Red Hat STF Operators' in command_result.stdout"
+    retries: 6
+    delay: 20
+    tags: check_pkg_configured
+
+  - name: Check packagemanifests service-telemetry-operator availability
+    command: "oc get packagemanifests service-telemetry-operator"
+    register: command_result
+    until: "'Red Hat STF Operators' in command_result.stdout"
+    retries: 6
+    delay: 20
+    tags: check_pkg_configured
+

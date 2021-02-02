@@ -1,0 +1,13 @@
+---
+# tasks file for ocp4-pao-config
+- block:
+  - debug:
+      msg: "Hello"
+
+  module_defaults:
+    group/k8s:
+      kubeconfig: "{{ kubeconfig }}"
+      host: "https://api.{{ cluster_name }}.{{ public_domain }}:6443"
+      validate_certs: "{{ k8s_validate_certs }}"
+
+

@@ -1,0 +1,18 @@
+apiVersion: performance.openshift.io/v1
+kind: PerformanceProfile
+metadata:
+  name: {{ pao_profile_name }}
+spec:
+  cpu:
+    isolated: {{ cpu_isolated }}
+    reserved: {{ cpu_reserved }}
+  hugepages:
+    defaultHugepagesSize: {{ default_hugepages_size }}
+    pages:
+    - count: 4
+      node: 0
+      size: {{ default_hugepages_size }}
+  nodeSelector:
+    node-role.kubernetes.io/{{ pao_profile_nodeselector }}: ""
+  realTimeKernel:
+    enabled: {{ pao_rt_kernel }}

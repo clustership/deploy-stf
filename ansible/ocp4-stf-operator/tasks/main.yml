@@ -1,0 +1,15 @@
+---
+# tasks file for ocp4-pao-config
+- name: Install PAO operator
+  include: prepare.yml
+  tags: prepare
+
+- name: Install PAO operator
+  include: install.yml
+  tags: install
+
+- name: Configure PAO operator
+  include: configure.yml
+  tags: configure 
+
+
